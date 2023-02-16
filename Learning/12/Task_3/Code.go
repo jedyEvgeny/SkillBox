@@ -2,43 +2,47 @@ package main
 
 import (
 	"bufio"
+	"bytes"
 	"fmt"
 	"os"
 )
 
 func main() {
-	file, err := os.Create("some.txt")
-	if err := os.Chmod("some.txt", 0444); err != nil {
-		fmt.Println(err)
-	}
-	writer := bufio.NewWriter(file)
+	fileName := "file1.txt"
+	file, err := os.Create(fileName)
 	if err != nil {
-		fmt.Println(err)
+		panic(err)
 		return
 	}
 	defer file.Close()
 
+	if err = os.Chmod(fileName, 0400); err != nil {
+		fmt.Println(err)
+	}
+	writer := bufio.NewWriter(file) //убедился, что проверка уровня доступа осуществялется при открытии файла
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
 	writer.WriteString("Текст")
 	writer.Flush()
-	// fileName := "Task_3.txt"
-	// file, err := os.Create(fileName)
-	// if err != nil {
-	// 	fmt.Println("Не удалось создать файл")
-	// 	panic(err)
-	// 	return
-	// }
-	// defer file.Close()
 
-	// if err = os.Chmod(fileName, 0444); err != nil {
-	// 	panic(err)
-	// 	return
-	// }
+	if file, err = os.Open(fileName); err != nil {
+		panic(err)
+		return
+	}
+	defer file.Close()
 
-	// var buf bytes.Buffer
-	// buf.WriteString("Текст")
-	// if _, err = file.Write(buf.Bytes()); err != nil {
-	// 	fmt.Println("Не удалось выполнить запись в файл")
-	// 	panic(err)
-	// 	return
-	// }
+	var s string
+	var writerTwo bytes.Buffer
+	fmt.Println("Введите слово:")
+	fmt.Scan(&s)
+	writerTwo.WriteString(s)
+
+	if _, err = file.Write(writerTwo.Bytes()); err != nil {
+		fmt.Println("Не удалось записать в файл, т.к. не позволяет уровень доступа")
+		panic(err)
+		return
+	}
 }
