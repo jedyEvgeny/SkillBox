@@ -3,12 +3,12 @@ package main
 import (
 	"bytes"
 	"fmt"
+	"io/ioutil"
 	"os"
 	"time"
 )
 
 func main() {
-	var answer string
 	file, err := os.Create("Log.txt")
 	if err != nil {
 		panic(err)
@@ -19,6 +19,7 @@ func main() {
 
 	for {
 		fmt.Println("Введите запрос:")
+		var answer string
 		fmt.Scan(&answer)
 		if answer == "exit" {
 			break
@@ -27,7 +28,7 @@ func main() {
 		writer.WriteString(timeNow.Format("01-02-2006 15:04:05 "))
 		writer.WriteString(fmt.Sprintf("%s\n", answer))
 	}
-	if _, err = file.Write(writer.Bytes()); err != nil {
+	if err = ioutil.WriteFile("Log.txt", writer.Bytes(), 0666); err != nil {
 		panic(err)
 		return
 	}
