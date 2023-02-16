@@ -8,6 +8,9 @@ import (
 
 func main() {
 	var answer string
+	timeTemplate := "01-02-2006 15:04:05"
+	count := 1
+
 	file, err := os.Create("Log.txt")
 	if err != nil {
 		panic(err)
@@ -21,9 +24,9 @@ func main() {
 		if answer == "exit" {
 			break
 		}
-		timeNow := time.Now()
-		file.WriteString(timeNow.Format("01-02-2006 15:04:05 "))
-		file.WriteString(fmt.Sprintf("%s\n", answer))
+		moment := time.Now().Format(timeTemplate)
+		file.WriteString(fmt.Sprintf("%d %s %s\n", count, moment, answer))
+		count++
 	}
 	fmt.Println("Программа завершила работу")
 }
