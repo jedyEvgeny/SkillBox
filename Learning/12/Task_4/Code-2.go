@@ -14,6 +14,11 @@ func main() {
 		return
 	}
 	defer file.Close()
+	result, err := ioutil.ReadAll(file)
+	if err != nil {
+		panic(err)
+		return
+	}
 
 	info, err := file.Stat()
 	if err != nil {
@@ -26,11 +31,5 @@ func main() {
 		return
 	}
 
-	resultBytes, err := ioutil.ReadAll(file)
-	if err != nil {
-		panic(err)
-		return
-	}
-	fmt.Println(string(resultBytes))
+	fmt.Println(string(result))
 }
-
