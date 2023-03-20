@@ -12,17 +12,29 @@ const (
 
 func main() {
 	arrayFirst := [sizeArrOne]int{10, 16, 32, 64}
-	arraySecond := [sizeArrTwo]int{32, 64, 15, 258, 139}
+	arraySecond := [sizeArrTwo]int{32, 64, 65, 666, 39184}
 	fmt.Println(newArr(arrayFirst, arraySecond))
 }
 
 func newArr(inArrFirst [sizeArrOne]int, inArrSec [sizeArrTwo]int) [sizeArrThree]int {
 	var arrayUnity [sizeArrThree]int
-	for i := 0; i < sizeArrOne; i++ {
-		arrayUnity[i] = inArrFirst[i]
+	var a, b, i int
+	for ; a < sizeArrOne && b < sizeArrTwo; i++ {
+		if inArrFirst[a] < inArrSec[b] {
+			arrayUnity[i] = inArrFirst[a]
+			a++
+		} else {
+			arrayUnity[i] = inArrSec[b]
+			b++
+		}
 	}
-	for i := sizeArrOne; i < sizeArrThree; i++ {
-		arrayUnity[i] = inArrSec[i-sizeArrOne]
+	for ; a < sizeArrOne; i++ {
+		arrayUnity[i] = inArrFirst[a]
+		a++
+	}
+	for ; b < sizeArrTwo; i++ {
+		arrayUnity[i] = inArrSec[b]
+		b++
 	}
 	return arrayUnity
 }
