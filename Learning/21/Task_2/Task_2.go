@@ -11,6 +11,10 @@ func main() {
 }
 
 func wrapFunc(inL, inM int, A func(int, int) int) int {
-	// Непонятно, что тут делать
+	var result int
+	defer func() {
+		result = A(inL, inM)
+		fmt.Println("Результат через defer равен:", result)
+	}()
+	return result
 }
-
