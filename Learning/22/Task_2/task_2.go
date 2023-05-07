@@ -70,10 +70,8 @@ func findIdx(arr [sizeArr]int, num int) (idx int) {
 			min = mid + 1
 		}
 	}
-	for i := 0; i < idx; i++ {
-		if arr[i] == num {
-			idx = i
-		}
+	for idx > 0 && arr[idx-1] == num {
+		idx--
 
 	}
 	return
