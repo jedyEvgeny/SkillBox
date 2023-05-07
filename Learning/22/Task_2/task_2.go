@@ -72,7 +72,6 @@ func findIdx(arr [sizeArr]int, num int) (idx int) {
 	}
 	for idx > 0 && arr[idx-1] == num {
 		idx--
-
 	}
 	return
 }
