@@ -60,6 +60,7 @@ func findAmountNumInArr(arr []int, value int) (amount int) {
 	for idx, el := range arr {
 		if el == value {
 			amount = len(arr) - idx - 1
+			return
 		}
 	}
 	return
