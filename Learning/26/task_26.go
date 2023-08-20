@@ -38,7 +38,6 @@ func oneArgs() []uint8 {
 		fmt.Println(string(file))
 		catData = append(append(catData, "\n"...), file...)
 	}
-	fmt.Println(string(catData))
 	return catData
 }
 
