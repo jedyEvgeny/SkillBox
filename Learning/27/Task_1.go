@@ -1,7 +1,11 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
+	"os"
+	"strconv"
+	"strings"
 )
 
 type Student struct {
@@ -10,48 +14,81 @@ type Student struct {
 	grade int
 }
 
-func main() {
-	fmt.Println("*****27.8 Практическая работа*****\n")
-	mapStudent := make(map[string]*Student)
-	aboutStudents(mapStudent)
-	printMap(mapStudent)
-	fmt.Println("\nКонец программы")
+type Storage map[string]*Student
+
+func newStudent(name string, age int, grade int) *Student {
+	return &Student{name, age, grade}
 }
 
-func aboutStudents(mapStudent map[string]*Student) {
+func (s Storage) put(name string, student *Student) {
+	s[name] = student
+}
+
+func (s Storage) get() {
+	for _, value := range s {
+		fmt.Println(value.name, value.age, value.grade)
+	}
+}
+
+func main() {
+	storage := make(Storage)
+	getInfoAboutAllStudent(storage)
+	fmt.Println("--------------------")
+	fmt.Println("Имена всех студентов:")
+	fmt.Println("--------------------")
+	storage.get()
+}
+
+func getInfoAboutAllStudent(storage Storage) {
 	for {
-		nameStudent, ageStudent, gradeStudent := askNameAgeGradeStudent()
-		if nameStudent == "" {
+		input := genInfoAboutOneStudent()
+		if input == "" {
 			break
 		}
-		personStruct := &Student{
-			name:  nameStudent,
-			age:   ageStudent,
-			grade: gradeStudent,
+		data, msg := getArrAboutStudent(input)
+		if msg != "" {
+			continue
 		}
-		mapStudent[personToString(personStruct)] = personStruct
+		name, age, grade, msg := separateInfoAboutStudent(data)
+		if msg != "" {
+			fmt.Println(msg)
+			continue
+		}
+		student := newStudent(name, age, grade)
+		storage.put(name, student)
 	}
 }
 
-func askNameAgeGradeStudent() (string, int, int) {
-	var nameStudent string
-	var ageStudent, gradeStudent int
-	fmt.Println("\tВведите имя студента:")
-	fmt.Scan(&nameStudent)
-	fmt.Println("\tВведите возраст студента:")
-	fmt.Scan(&ageStudent)
-	fmt.Println("\tВведите курс студента: ")
-	fmt.Scan(&gradeStudent)
-	fmt.Println()
-	return nameStudent, ageStudent, gradeStudent
+func genInfoAboutOneStudent() string {
+	scanner := bufio.NewScanner(os.Stdin)
+	fmt.Print("Введите данные студента (имя возраст класс) или нажимте Enter для завершения: ")
+	scanner.Scan()
+	input := scanner.Text()
+	return input
 }
 
-func personToString(p *Student) string {
-	return fmt.Sprint(p.name, " ", p.age, p.grade)
-}
-
-func printMap(mapStudent map[string]*Student) {
-	for key, _ := range mapStudent {
-		fmt.Println(key)
+func getArrAboutStudent(input string) (data []string, msg string) {
+	data = strings.Split(input, " ")
+	if len(data) != 3 {
+		msg = "Неверный формат ввода"
+		fmt.Println(msg)
 	}
+	return
+}
+
+func separateInfoAboutStudent(info []string) (string, int, int, string) {
+	var msg string
+	name := info[0]
+	age, err := strconv.Atoi(info[1])
+	if err != nil {
+		msg = "Ошибка в возрасте"
+	}
+	grade, errGrade := strconv.Atoi(info[2])
+	if errGrade != nil {
+		msg = "Ошибка в классе"
+	}
+	if err != nil && errGrade != nil {
+		msg = "Ошибка в возрасте и классе"
+	}
+	return name, age, grade, msg
 }
