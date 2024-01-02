@@ -16,20 +16,6 @@ type Student struct {
 
 type Storage map[string]*Student
 
-func newStudent(name string, age int, grade int) *Student {
-	return &Student{name, age, grade}
-}
-
-func (s Storage) put(name string, student *Student) {
-	s[name] = student
-}
-
-func (s Storage) get() {
-	for _, value := range s {
-		fmt.Println(value.name, value.age, value.grade)
-	}
-}
-
 func main() {
 	storage := make(Storage)
 	getInfoAboutAllStudent(storage)
@@ -91,4 +77,18 @@ func separateInfoAboutStudent(info []string) (string, int, int, string) {
 		msg = "Ошибка в возрасте и классе"
 	}
 	return name, age, grade, msg
+}
+
+func newStudent(name string, age int, grade int) *Student {
+	return &Student{name, age, grade}
+}
+
+func (s Storage) put(name string, student *Student) {
+	s[name] = student
+}
+
+func (s Storage) get() {
+	for _, value := range s {
+		fmt.Println(value.name, value.age, value.grade)
+	}
 }
